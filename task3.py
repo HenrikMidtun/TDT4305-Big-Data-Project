@@ -14,12 +14,15 @@ def load_data(context,url):
 
 def avg_review_by_city(data):
     lines = data.map(lambda x: (x.split("\t")[3],int(x.split("\t")[8])))
+
+    #https://stackoverflow.com/questions/29930110/calculating-the-averages-for-each-key-in-a-pairwise-k-v-rdd-in-spark-with-pyth
     #aggregateByKey(zero_val, in_part, inter_part)
     city_sum_count = lines.aggregateByKey(
         (0,0),
         lambda a,b: (a[0]+b, a[1]+1),
         lambda a,b: (a[0]+b[0], a[1]+b[1])) 
     avg_rev_city = city_sum_count.mapValues(lambda v: v[0]/v[1]).collect()
+
     for city in avg_rev_city:
         print(city)
     return avg_rev_city
@@ -33,6 +36,22 @@ def most_frequent_categories(data):
         print(cat)
     return top10
 
+def avg_postals(data):
+    #(p_code, (lat, long, count=1))
+    lines = data.map(
+        lambda x: (x.split("\t")[5], (float(x.split("\t")[6]), float(x.split("\t")[7]),1)))
+    #Iterative weighted average    
+    post_avg = lines.reduceByKey(
+        lambda a,b: (
+            (a[0]*a[2]+b[0]*b[2])/(a[2]+b[2]), #latitude
+            (a[1]*a[2]+b[1]*b[2])/(a[2]+b[2]), #longitude
+            a[2]+b[2]                          #count
+            )).collect()
+
+    for s in post_avg:
+        print(s)
+    return post_avg
+
 context = SparkContext("local","task3")
 data = load_data(context, l_file[0])
-most_frequent_categories(data)
+avg_postals(data)
