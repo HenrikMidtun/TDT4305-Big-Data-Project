@@ -9,13 +9,22 @@ l_file = [
     ,"./yelp-data/yelp_top_reviewers_with_reviews.csv"
     ,"./yelp-data/yelp_top_users_friendship_graph.csv"
     ]
-
+# ----helpers----
 def load_data(context,url):
     data = context.textFile(url)
     header = data.first()
     data = data.filter(lambda line: line != header)
     return data
 
+#Returns (id, count) already sorted descending
+def get_counts(data, counts_in = True):
+    index = 1 if counts_in else 0
+    in_lines = data.map(lambda x: (x.split(",")[index],1))
+    counts = in_lines.reduceByKey(lambda a,b: a+b).sortBy(lambda x: x[1], ascending=False)
+    return counts
+
+
+# ----tasks----
 def top10_in(data):
     lines = data.map(lambda x: (x.split(",")[1],1))
     sum_in = lines.reduceByKey(lambda a,b: a+b)
@@ -45,8 +54,21 @@ def get_means(data):
     print('Average in: {0}\nAverage out: {1}'.format(avg_in,avg_out))
     return avg_in,avg_out
 
-def get_median():
-    return None
+def get_median(data):
+    sorted_counts = get_counts(data,counts_in=True)
+    indexed = sorted_counts.zipWithIndex().map(lambda x: (x[1],x[0])).cache()
+    count = indexed.count()
+    odd = count%2 == 1
+    if odd:
+        tup = indexed.lookup(int(count/2))[0]
+        r_val = tup[1]
+    else:
+        tup_1 = indexed.lookup(count/2)[0]
+        tup_2 = indexed.lookup(count/2-1)[0]
+        r_val = (tup_1[1]+tup_2[1])/2
+    print("Median: ", r_val)
+    return r_val
+
 
 context = SparkContext("local","friendship")
 data = load_data(context, l_file[2])
