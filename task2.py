@@ -130,7 +130,7 @@ get_reviews_year(data)
 #get_average_reviews(data)
 #get_average_reviews(data)
 #get_avg_len_total(data)
-#final_func(data)
+final_func(data).saveAsTextFile('Final Func')
 '''
 for url in l_file:
     data = context.textFile(url)
