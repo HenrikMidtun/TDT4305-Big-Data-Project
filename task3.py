@@ -46,12 +46,19 @@ def avg_postals(data):
             (a[0]*a[2]+b[0]*b[2])/(a[2]+b[2]), #latitude
             (a[1]*a[2]+b[1]*b[2])/(a[2]+b[2]), #longitude
             a[2]+b[2]                          #count
-            )).collect()
-
-    for s in post_avg:
-        print(s)
+            ))
     return post_avg
 
 context = SparkContext("local","task3")
 data = load_data(context, l_file[0])
-avg_postals(data)
+
+
+###Task 3b
+result = most_frequent_categories(data)
+with open('./Task3/Task 3b.txt', 'w') as f:
+    for item in result:
+        f.write("%s\n" % str(item))
+    f.close()
+
+###Task 3c
+avg_postals(data).saveAsTextFile('./Task3/Task 3c.txt')

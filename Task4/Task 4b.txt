@@ -1,0 +1,1 @@
+Average in: 3.8641613542401547Average out: 12.060049149220834Median: 1.0

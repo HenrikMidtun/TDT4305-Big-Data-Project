@@ -46,3 +46,7 @@ joined = dfr.join(dfb, dfb.business_id == dfr.business_id)
 top_reviewers = joined.groupBy(joined.user_id).count().orderBy('count', ascending=False).take(20)
 
 print(top_reviewers)
+
+with open('Task 6.txt', 'w') as f:
+    for item in top_reviewers:
+        f.write("%s\n" % str(item))

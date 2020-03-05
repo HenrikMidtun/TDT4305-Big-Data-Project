@@ -1,0 +1,3 @@
+Number of rows in ./yelp-data/yelp_businesses.csv: 192610
+Number of rows in ./yelp-data/yelp_top_reviewers_with_reviews.csv: 883738
+Number of rows in ./yelp-data/yelp_top_users_friendship_graph.csv: 1938473

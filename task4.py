@@ -74,4 +74,26 @@ context = SparkContext("local","friendship")
 data = load_data(context, l_file[2])
 #top10_out(data)
 #get_means(data)
-get_median(data)
+
+###Task 4a
+out = top10_out(data)
+inndata = top10_in(data)
+
+'''
+with open('./Task4/Task 4.txt', 'w') as f:
+    f.write('Out data:')
+    for o in out:
+        f.write("{0}\n".format(str(o)))
+    for melding in inndata:
+        f.write(str(melding))
+    f.close()
+'''
+
+###Task 4b
+avg_in,avg_out = get_means(data)
+median = get_median(data)
+with open('./Task4/Task 4b.txt', 'w') as f:
+    f.write('Average in: {0}'.format(avg_in))
+    f.write('Average out: {0}'.format(avg_out))
+    f.write('Median: {0}'.format(median))
+    f.close()

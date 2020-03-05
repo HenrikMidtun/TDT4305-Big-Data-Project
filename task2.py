@@ -67,6 +67,7 @@ def get_first_last(data):
     print(get_timestring(first))
     print("last")
     print(get_timestring(last))
+    return [first, last]
 
 def get_amount_reviews(data):
     '''
@@ -124,16 +125,35 @@ def get_timestring(uni_stamp):
 
 context = SparkContext("local", "first app")
 data = load_data(context,l_file[1])
-get_reviews_year(data)
-#get_first_last(data)
-#get_avg_lenreview(data)
-#get_average_reviews(data)
-#get_average_reviews(data)
-#get_avg_len_total(data)
-final_func(data).saveAsTextFile('Final Func')
+###Task 2a
 '''
-for url in l_file:
-    data = context.textFile(url)
-    num = data.count()
-    print(num)
+with open('./Task2/Task 2a.txt', 'w') as f:
+    f.write("Number of users: %s\n" % str(get_num_users(data)))
+    f.close()
 '''
+###Task 2b
+'''
+with open('./Task2/Task 2b.txt', 'w') as f:
+    f.write("Average characters: %s\n" % str(get_avg_char_review(data)))
+    f.close()
+'''
+###Task 2c
+top_businesses = get_top_businesses(data)
+with open('./Task2/Task 2c.txt', 'w') as f:
+    for item in top_businesses:
+        f.write("%s\n" % str(item))
+    f.close()
+###Task 2d
+num_year = get_reviews_year(data)
+with open('./Task2/Task 2d.txt', 'w') as f:
+    for item in num_year:
+        f.write("%s\n" % str(item))
+    f.close()
+###Task 2e
+result = get_first_last(data)
+with open('./Task2/Task 2e.txt', 'w') as f:
+    for item in result:
+        f.write("%s\n" % str(item))
+    f.close()
+###Task 2f
+#final_func(data).saveAsTextFile('Final Func')
