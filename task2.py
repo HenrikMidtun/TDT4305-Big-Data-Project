@@ -3,13 +3,19 @@ from operator import add
 from datetime import datetime
 import numpy as np
 
+
 l_file = [
-    "yelp_businesses.csv"
-    ,"yelp_top_reviewers_with_reviews.csv"
-    ,"yelp_top_users_friendship_graph.csv"
+    "./yelp-data/yelp_businesses.csv"
+    ,"./yelp-data/yelp_top_reviewers_with_reviews.csv"
+    ,"./yelp-data/yelp_top_users_friendship_graph.csv"
     ]
 
+
 def PCC(x,y,X,Y):
+    x = float(x)
+    y = float(y)
+    X = float(X)
+    Y = float(Y)
     num = (x-X)*(y-Y)
     den = np.sqrt((x-X)**2)*np.sqrt((y-Y)**2)
     return num/den
@@ -118,13 +124,13 @@ def get_timestring(uni_stamp):
 
 context = SparkContext("local", "first app")
 data = load_data(context,l_file[1])
-#get_reviews_year(data)
+get_reviews_year(data)
 #get_first_last(data)
 #get_avg_lenreview(data)
 #get_average_reviews(data)
 #get_average_reviews(data)
 #get_avg_len_total(data)
-final_func(data)
+#final_func(data)
 '''
 for url in l_file:
     data = context.textFile(url)
